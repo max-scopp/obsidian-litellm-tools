@@ -1,0 +1,18 @@
+# Custom image that layers the obsidian-litellm-tools plugin on top of the
+# official LiteLLM image. Build context is the plugin repo root.
+#
+# Build from the plugin repo:
+#   docker build -f Dockerfile.litellm -t litellm-with-obsidian:local .
+#
+# Then in ai-platform (CT 106):
+#   docker tag litellm-with-obsidian:local litellm-with-obsidian:local
+#   docker compose up -d  # uses this image
+FROM ghcr.io/berriai/litellm:main-stable
+
+# The LiteLLM image ships its Python in /app/.venv but no pip or uv binary.
+# We bootstrap pip via ensurepip so we can install our plugin.
+COPY pyproject.toml /tmp/plugin/pyproject.toml
+COPY src /tmp/plugin/src
+RUN python -m ensurepip --upgrade \
+ && python -m pip install --no-cache-dir /tmp/plugin \
+ && rm -rf /tmp/plugin

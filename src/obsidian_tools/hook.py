@@ -21,7 +21,7 @@ The hook is registered in `config.yaml` via:
 
     litellm_settings:
       callbacks:
-        - obsidian_tools.hook:ObsidianToolHook
+        - obsidian_tools.hook:proxy_handler_instance
 
 Configuration is read from environment variables at construction time.
 """
@@ -35,7 +35,7 @@ from typing import Any
 
 from litellm.integrations.custom_logger import CustomLogger
 
-from .tools import as_tool_list, is_obsidian_tool
+from .tools import TOOLS, as_tool_list, is_obsidian_tool
 from .writer_client import WriterClient
 
 log = logging.getLogger("obsidian_tools.hook")
@@ -57,8 +57,8 @@ SYSTEM_PROMPT_FRAGMENT = (
 class ObsidianToolHook(CustomLogger):
     """LiteLLM callback that injects and dispatches the obsidian_* tools."""
 
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+    def __init__(self) -> None:
+        super().__init__()
         self.writer = WriterClient(
             base_url=os.environ.get("OBSIDIAN_WRITER_URL", "http://127.0.0.1:4040"),
             token=os.environ.get("OBSIDIAN_WRITER_TOKEN", ""),
@@ -256,6 +256,13 @@ class ObsidianToolHook(CustomLogger):
     # In-memory scratch space for the loop's final response. This is fine
     # for a single-process proxy; for multi-worker scale-out, move to Redis.
     _loop_state: dict[str, Any] = {}
+
+
+# Module-level singleton. LiteLLM 1.101+ requires a proxy_handler_instance
+# reference, not a class — see the litellm callback loading contract.
+# The env vars (OBSIDIAN_WRITER_*) MUST be set before this module is imported,
+# which is guaranteed when litellm is launched with `env_file: .env`.
+proxy_handler_instance = ObsidianToolHook()
 
 
 # ----------------------------------------------------------------------------
