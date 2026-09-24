@@ -5,16 +5,22 @@ from __future__ import annotations
 from obsidian_tools.tools import TOOLS, as_tool_list, is_obsidian_tool
 
 
-def test_all_eight_tools_defined() -> None:
+def test_all_tools_defined() -> None:
     expected = {
+        "obsidian_recall",
         "obsidian_search",
         "obsidian_read",
         "obsidian_list",
         "obsidian_create",
         "obsidian_append",
+        "obsidian_edit",
+        "obsidian_write_section",
         "obsidian_patch_frontmatter",
+        "obsidian_read_canvas",
+        "obsidian_write_canvas",
         "obsidian_map",
         "obsidian_propose_delete",
+        "obsidian_history",
     }
     assert set(TOOLS.keys()) == expected
 

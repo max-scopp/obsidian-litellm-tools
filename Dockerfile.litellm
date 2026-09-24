@@ -1,18 +1,21 @@
-# Custom image that layers the obsidian-litellm-tools plugin on top of the
-# official LiteLLM image. Build context is the plugin repo root.
+# Custom image that layers this tool pack on top of the official LiteLLM image.
+# Build context is this repo's root.
 #
-# Build from the plugin repo:
 #   docker build -f Dockerfile.litellm -t litellm-with-obsidian:local .
+#   docker compose up -d --force-recreate litellm   # where your config.yaml lives
 #
-# Then in ai-platform (CT 106):
-#   docker tag litellm-with-obsidian:local litellm-with-obsidian:local
-#   docker compose up -d  # uses this image
+# `restart` does NOT pick up a rebuilt image — recreate the container.
 FROM ghcr.io/berriai/litellm:main-stable
 
-# The LiteLLM image ships its Python in /app/.venv but no pip or uv binary.
-# We bootstrap pip via ensurepip so we can install our plugin.
+# The LiteLLM image ships its Python in /app/.venv but no pip or uv binary, so
+# pip is bootstrapped with ensurepip. git comes from apk (the image is Wolfi,
+# not Debian) and is needed only during the build: litellm-toolbelt — the loop
+# and streaming translator this pack plugs into — is a git dependency rather
+# than a PyPI release.
 COPY pyproject.toml /tmp/plugin/pyproject.toml
 COPY src /tmp/plugin/src
-RUN python -m ensurepip --upgrade \
+RUN apk add --no-cache git \
+ && python -m ensurepip --upgrade \
  && python -m pip install --no-cache-dir /tmp/plugin \
+ && apk del git \
  && rm -rf /tmp/plugin

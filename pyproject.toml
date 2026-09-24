@@ -1,12 +1,13 @@
 [project]
 name = "obsidian-litellm-tools"
-version = "0.1.0"
-description = "LiteLLM proxy plugin that registers an obsidian_* tool set and dispatches tool calls to the obsidian-writer service."
+version = "0.2.0"
+description = "LiteLLM proxy tool pack that registers an obsidian_* tool set and dispatches tool calls to the obsidian-writer service."
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [{ name = "max-scopp" }]
 dependencies = [
     "litellm>=1.80",
+    "litellm-toolbelt @ git+https://github.com/max-scopp/litellm-toolbelt@main",
     "httpx>=0.27",
     "pydantic>=2.9",
     "pyyaml>=6.0",
@@ -20,9 +21,16 @@ dev = [
     "mypy>=1.13",
 ]
 
+[project.urls]
+Homepage = "https://github.com/max-scopp/obsidian-litellm-tools"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+# litellm-toolbelt is a git dependency, not a PyPI release.
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/obsidian_tools"]
