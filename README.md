@@ -21,7 +21,7 @@ writer client. `pack.py` is the whole contract.
 | Tool pack | this repo | The `obsidian_*` tools, the vault prompt, the writer client |
 | Proxy hook | [litellm-toolbelt](https://github.com/max-scopp/litellm-toolbelt) | Server-side tool execution, streaming included |
 | Vault API | [obsidian-writer](https://github.com/max-scopp/obsidian-writer) | The only thing that writes the vault: tokens, rate limits, atomic writes, history |
-| Recall index | [athenaeum](https://github.com/max-scopp/athenaeum) | Search by meaning behind `obsidian_recall` (optional) |
+| Recall index | [obsidian-recall](https://github.com/max-scopp/obsidian-recall) | Search by meaning behind `obsidian_recall` (optional) |
 | Vault | — | Plain Markdown on a filesystem, edited by hand in Obsidian too |
 
 See [WORKFLOW.md](WORKFLOW.md) for how the pieces sit together in a running

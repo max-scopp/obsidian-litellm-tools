@@ -27,7 +27,7 @@ Obsidian on any device that mounts the share · soft deletes land in .trash/
 | LLM proxy | [litellm-toolbelt](https://github.com/max-scopp/litellm-toolbelt) | The hook: tool injection, the loop, the streaming translator |
 | Tool pack | [obsidian-litellm-tools](https://github.com/max-scopp/obsidian-litellm-tools) | Registers and executes the `obsidian_*` tools |
 | Vault API | [obsidian-writer](https://github.com/max-scopp/obsidian-writer) | The only thing that writes the vault |
-| Recall index | [athenaeum](https://github.com/max-scopp/athenaeum) | Embeddings + passages behind `obsidian_recall` |
+| Recall index | [obsidian-recall](https://github.com/max-scopp/obsidian-recall) | Embeddings + passages behind `obsidian_recall` |
 | Vault store | — | Plain Markdown + YAML frontmatter on a filesystem |
 | Client app | — | Obsidian; the human edits here directly |
 
